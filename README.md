@@ -37,7 +37,7 @@ In theory, you simply need to call the dll functions to hook to an existing wind
 
 ##API
 
-All exported functions are non mangled cdecl convention do you can statically link in your project or load the library manually.
+All exported functions are non mangled cdecl convention so you can statically link in your project or load the library manually.
 
 + export void TMC_SEB_LoadLanguage(LPCSTR LanguageName, LPCSTR LanguageFile)
 
