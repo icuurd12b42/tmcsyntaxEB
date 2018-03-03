@@ -12,8 +12,6 @@ In theory, you simply need to call the dll functions to hook to an existing wind
 
 ##Features
 
-Multiple syntax support
-imple Interface
 
 1. No complex libraries and system to add to your project
 2. Just tell it the edit box you want to do highliting with and you are off
@@ -22,6 +20,8 @@ imple Interface
 5. Switch Language Feature
 6. Toggle Highliting On Off
 7. Line Numbering (On the side of the box), Toggle On Off
+8. Multiple syntax support
+9. Simple Interface
 
 
 ##Limitations
