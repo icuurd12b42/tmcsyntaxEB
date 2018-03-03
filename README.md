@@ -12,8 +12,8 @@ In theory, you simply need to call the dll functions to hook to an existing wind
 
 ##Features
 
-⋅⋅*Multiple syntax support
-⋅⋅*Simple Interface
+Multiple syntax support
+imple Interface
 
 -No complex libraries and system to add to your project
 
@@ -98,3 +98,11 @@ export void TMC_SEB_CleanUp(HWND hWnd)
 
 -You must load the library manually as the dll must stay in memory for the duration of the application execution
 -See the AutoHotKey sub folder for details
+
+
+1. First ordered list item
+2. Another item
+⋅⋅* Unordered sub-list. 
+1. Actual numbers don't matter, just that it's a number
+⋅⋅1. Ordered sub-list
+4. And another item.
