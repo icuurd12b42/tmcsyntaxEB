@@ -7,7 +7,7 @@ This code hooks to the standard windows edit box MainWindowProc and supplements 
 In theory, you simply need to call the dll functions to hook to an existing windows edit box passing it's window handle and the syntax to use.
 
 
-##In Mid Commit. Come Back Tomorow.
+![alt text](https://cdn.pbrd.co/images/HabSMJC.png)
 
 
 ##Features
