@@ -62,7 +62,7 @@ All exported functions are non mangled cdecl convention do you can statically li
   LineNumberColor is the color of the code line shown to the side of the edit box
 
 
-You have to provide room to the left of the edit box for the line numbers
+  You have to provide room to the left of the edit box for the line numbers
 
 
 + export void TMC_SEB_RemoveHilite(HWND hWnd)
