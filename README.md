@@ -2,7 +2,7 @@
 
 Code Syntax Highlighting for Windows Standard Edit Box Control
 
-This code hooks to the standard windows edit box MainWindowProc and supplements it's drawing to allow code syntax highlighting.
+This code hooks to the standard windows edit box MainWindowProc and supplements its drawing to allow code syntax highlighting.
 
 In theory, you simply need to call the dll functions to hook to an existing windows edit box passing its window handle and the syntax to use.
 
