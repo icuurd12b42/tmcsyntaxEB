@@ -10,7 +10,7 @@ In theory, you simply need to call the dll functions to hook to an existing wind
 ![alt text](https://cdn.pbrd.co/images/HabSMJC.png)
 
 
-##Features
+## Features
 
 
 1. No complex libraries and system to add to your project
@@ -24,18 +24,18 @@ In theory, you simply need to call the dll functions to hook to an existing wind
 9. Simple Interface
 
 
-##Limitations
+## Limitations
 
 1. 64K Limit on windows 32
 2. Alpha Release!!
 
 
-##ALPHA RELEASE
+## ALPHA RELEASE
 
 -Tested with AutoHotKey Ansi 32 BIT Version 1.1.26.01
 
 
-##API
+## API
 
 All exported functions are non mangled cdecl convention so you can statically link in your project or load the library manually.
 
@@ -88,7 +88,7 @@ All exported functions are non mangled cdecl convention so you can statically li
   This will free all the memory used by the system. Unhooks all windows, releases every language. Call when your program ends. It's optional, Windows takes care of this really
 
 
-##AutoHotKey Ansi 32 BIT Version 1.1.26.01 Release Notes
+## AutoHotKey Ansi 32 BIT Version 1.1.26.01 Release Notes
 
   You must load the library manually as the dll must stay in memory for the duration of the application execution
   See the AutoHotKey sub folder for details
