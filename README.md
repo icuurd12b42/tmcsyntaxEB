@@ -44,13 +44,13 @@ Functions that pass or return strings have a Function() for the wide char versio
 + export void TMC_SEB_LoadLanguage(const TCHAR* LanguageName, const TCHAR* LanguageFile)
 + export void TMC_SEB_LoadLanguageA(LPCSTR LanguageName, LPCSTR LanguageFile)
 
-  This functions loads a language file in the system. 
+  This function loads a language file in the system. 
 
   LanguageName is the name you would reference the laguage with later on. This name is also displayed in the context menu in the select language option
 
-  LanguageFile is the language.lng file you wish to load
+  LanguageFile is the language.lng file you wish to load.
 
-  Commonly you would Load all your files at startup. it is also commont to uses the filename without extention for the Language Name
+  Commonly you would Load all your files at startup. It is also common to uses the filename without extention for the Language Name
 
 + export void TMC_SEB_SetHilite(HWND hWnd, const TCHAR* LanguageName, DWORD LineNumberBackColor, DWORD LineNumberColor)
 + export void TMC_SEB_SetHiliteA(HWND hWnd, LPCSTR LanguageName, DWORD LineNumberBackColor, DWORD LineNumberColor)
@@ -59,14 +59,14 @@ Functions that pass or return strings have a Function() for the wide char versio
 
   hWnd is the Edit Box handle
 
-  LanguageName is the name you used loading the file
+  LanguageName is the name you used loading the file.
 
-  LineNumberBackColor is the color of the parent window
+  LineNumberBackColor is the color of the parent window.
 
-  LineNumberColor is the color of the code line shown to the side of the edit box
+  LineNumberColor is the color of the code line shown to the side of the edit box.
 
 
-  You have to provide room to the left of the edit box for the line numbers
+  You have to provide room to the left of the edit box for the line numbers.
 
 
 + export void TMC_SEB_RemoveHilite(HWND hWnd)
@@ -81,21 +81,21 @@ Functions that pass or return strings have a Function() for the wide char versio
 
   Gets the selected language the user chose when editing. In memeory this is set to the language you last called SetHilite with.
 
-  It is also set when the user changes language while editing
+  It is also set when the user changes language while editing.
 
   If you get the language back every time a dialog closes and use it in the next dialog create, this will show a consistent interface with the language the user selected every time.
 
-  Good practice is to save the setting in an ini file for the next time your program is run
+  Good practice is to save the setting in an ini file for the next time your program is run.
 
 
 + export void TMC_SEB_CleanUp()
 
-  This will free all the memory used by the system. Unhooks all windows, releases every language. Call when your program ends. It's optional, Windows takes care of this really
+  This will free all the memory used by the system. Unhooks all windows, releases every language. Call when your program ends. It's optional, Windows takes care of this really.
 
 
 ## AutoHotKey Ansi 32 BIT Version 1.1.26.01 Release Notes
 
   You must load the library manually as the dll must stay in memory for the duration of the application execution
-  See the AutoHotKey sub folder for details
+  See the AutoHotKey sub folder for details.
 
 
