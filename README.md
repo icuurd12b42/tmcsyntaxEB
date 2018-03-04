@@ -39,7 +39,7 @@ In theory, you simply need to call the dll functions to hook to an existing wind
 
 All exported functions are non mangled cdecl convention so you can statically link in your project or load the library manually.
 
-Functions that pass or return strings have a for wide char and Ansi char version. Function() is the wide char and FuncrionA() is the Ansi version.
+Functions that pass or return strings have a Function() for the wide char version and a FunctionA() for the Ansi char version. 
 
 + export void TMC_SEB_LoadLanguage(const TCHAR* LanguageName, const TCHAR* LanguageFile)
 + export void TMC_SEB_LoadLanguageA(LPCSTR LanguageName, LPCSTR LanguageFile)
