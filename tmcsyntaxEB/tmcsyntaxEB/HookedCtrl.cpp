@@ -382,12 +382,7 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		}
 	}
 	
-	//end the draw reset things
-	//SetBkMode(hdc, OPAQUE);
-	//re-add the old font in the dc
-	SelectObject(hdc, hfOld);
-	//delete the region
-	//DeleteObject(hrgn);
+	
 
 	//used mem buffer
 	if (hdc != whdc)
@@ -404,10 +399,67 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 			 0,//_In_ int   nYSrc,
 			 SRCCOPY//_In_ DWORD dwRop
 		 );
-		 
+		 if (m_DoLineNumbers)
+		 {
+			
+
+			 SIZE sz;
+
+			 GetTextExtentPoint32(
+				 hdc,
+				 L"999 ",
+				 4,
+				 &sz
+			 );
+			 int width = sz.cx + 4;
+			 SetTextAlign(
+				 hdc,
+				 TA_TOP | TA_RIGHT
+			 );
+
+			 HBRUSH BackBrush = CreateSolidBrush(m_LineNumberBackColor);
+			 RECT clearRect = { - 10, - 10, width, rcCli.bottom };
+			 FillRect(hdc, &clearRect, BackBrush);
+			 DeleteObject(BackBrush);
+
+			 int TextY = 0;
+			 int LineAt = this->DirectSendMessage(EM_GETFIRSTVISIBLELINE, 0, 0) + 1;
+			 SetTextColor(hdc, m_LineNumberColor);
+			 wstring t;
+			 while (TextY < rcCli.bottom)
+			 {
+				 t = to_wstring(LineAt);
+				 TextOut(hdc, width - 1, TextY, t.c_str(), t.length());
+				 TextY += m_TextHeight;
+				 LineAt++;
+			 }
+
+
+			 
+
+
+			 BitBlt(
+				 whdc,//_In_ HDC   hdcDest,
+				 - (width + 4),//_In_ int   nXDest,
+				 1,//_In_ int   nYDest,
+				 width, //_In_ int   nWidth,
+				 nHeight, //_In_ int   nHeight,
+				 hdc,//_In_ HDC   hdcSrc,
+				 0,//_In_ int   nXSrc,
+				 0,//_In_ int   nYSrc,
+				 SRCCOPY//_In_ DWORD dwRop
+			 );
+			
+		 }
 		 
 	}
 
+	//end the draw reset things
+	//SetBkMode(hdc, OPAQUE);
+	//re-add the old font in the dc
+	SelectObject(hdc, hfOld);
+	//delete the region
+	//DeleteObject(hrgn);
 	//done painting, releace dc
 	if (TerminatePaintMode == 0){
 		EndPaint(hwnd, &ps);
@@ -415,68 +467,9 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	else if (TerminatePaintMode == 1){
 		ReleaseDC(hwnd, whdc);
 	}
-
-	
-	
 	if (hdc != whdc)
 	{
-		if (m_DoLineNumbers)
-		{
-			HBRUSH BackBrush = CreateSolidBrush(m_LineNumberBackColor);
-			RECT clearRect = { rcCli.left - 10,rcCli.top - 10,rcCli.right,rcCli.bottom };
-			FillRect(hdc, &clearRect, BackBrush);
-			DeleteObject(BackBrush);
-
-			SIZE sz;
-
-			GetTextExtentPoint32(
-				hdc,
-				L"999",
-				3,
-				&sz
-			);
-			int width = sz.cx + 4;
-			SetTextAlign(
-				hdc,
-				TA_TOP | TA_RIGHT
-			);
-			int TextY = 0;
-			int LineAt = this->DirectSendMessage(EM_GETFIRSTVISIBLELINE, 0, 0) + 1;
-			SetTextColor(hdc, m_LineNumberColor);
-			wstring t;
-			while (TextY < rcCli.bottom)
-			{
-				t = to_wstring(LineAt);
-				TextOut(hdc, width - 2, TextY, t.c_str(), t.length());
-				TextY += m_TextHeight;
-				LineAt++;
-			}
-
-
-			//RECT wRect; GetWindowRect(hwnd, &wRect);
-			//HWND hOtherhWnd = GetParent(hwnd);
-			//HDC OtherDC = GetWindowDC(hOtherhWnd);
-			//MapWindowPoints(HWND_DESKTOP, hOtherhWnd, (LPPOINT)&wRect, 2);
-
-			RECT wRect = GetClientRect();
-			HWND hOtherhWnd = hwnd;
-			HDC OtherDC = GetDC(hOtherhWnd);
-
-
-
-			BitBlt(
-				OtherDC,//_In_ HDC   hdcDest,
-				wRect.left - width - 6,//_In_ int   nXDest,
-				wRect.top + 1,//_In_ int   nYDest,
-				width, //_In_ int   nWidth,
-				nHeight, //_In_ int   nHeight,
-				hdc,//_In_ HDC   hdcSrc,
-				0,//_In_ int   nXSrc,
-				0,//_In_ int   nYSrc,
-				SRCCOPY//_In_ DWORD dwRop
-			);
-			ReleaseDC(hOtherhWnd, OtherDC);
-		}
+		
 		//clean my mem dc
 		DeleteObject((HBITMAP)SelectObject(hdc, oldbm));
 		DeleteDC(hdc);
@@ -940,12 +933,15 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			}
 			case WM_LBUTTONDBLCLK:
 			{
+				if (InPopUpMenu) return 0l;
 				m_WordSelectDrag = true;
 				RedrawWindow(m_hWnd, NULL, NULL, RDW_INVALIDATE);
 			} //fall though to lbuttondown
 			case WM_LBUTTONDOWN:
 			{
+				
 				if (InPopUpMenu) return 0l;
+				m_lMouseIsDown = true;
 				m_scrollHDirection = 0;
 				m_scrollVDirection = 0;
 				SetFocus(hwnd);
@@ -977,7 +973,11 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			
 			case WM_LBUTTONUP:
 			{
-				if (InPopUpMenu) return 0l;
+				m_lMouseIsDown = false;
+				m_WordSelectDrag = false;
+				//if (InPopUpMenu) return 0l;
+				//if (GetCapture() != hwnd) return 0l;
+				
 				m_scrollHDirection = 0;
 				m_scrollVDirection = 0;
 				if (m_TimerID != -1)
@@ -985,8 +985,8 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 					KillTimer(hwnd, m_TimerID);
 					m_TimerID = -1;
 				}
-				ReleaseCapture();
-				m_WordSelectDrag = false;
+				if (GetCapture() == hwnd) ReleaseCapture();
+				
 				return 0l;
 			}
 			case WM_TIMER:
@@ -1050,6 +1050,8 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			case WM_MOUSEMOVE:
 			{
 				if (InPopUpMenu) return 0l;
+				if (GetCapture() != hwnd) return 0l;
+				if (m_lMouseIsDown == false) return 0l;
 				if ((wParam & MK_LBUTTON) == MK_LBUTTON)
 				{
 					short x = LOWORD(lParam);

@@ -62,6 +62,7 @@ private:
 	COLORREF m_LineNumberBackColor = 0x272727;
 	COLORREF m_LineNumberColor =  0x4A4A4A;
 	bool m_DoLineNumbers = true;
+	bool m_lMouseIsDown = false;
 
 public:
 	Language * m_Language = NULL;
