@@ -3,7 +3,7 @@ class ByteLookup {
 private:
 	TCHARString m_RefString;
 	const TCHAR *m_Chars;
-	int m_LastByte;
+	size_t m_LastByte;
 public:
 	ByteLookup(){
 		SetData(L" ");
@@ -16,7 +16,7 @@ public:
 	}
 	bool Valid(TCHAR val)
 	{
-		return m_Chars[min((short)val, m_LastByte)] != ' ';
+		return m_Chars[min((unsigned short)val, m_LastByte)] != ' ';
 	}
 };
 class WordLookup {
@@ -34,7 +34,7 @@ public:
 	{
 		return m_Words.count(t.c_str());
 	}
-	int ValidTCHAR(TCHAR* text)
+	size_t ValidTCHAR(TCHAR* text)
 	{
 		//TCHARString ItemName;
 		
@@ -52,7 +52,7 @@ class SingleWordLookup {
 private:
 	TCHARString m_Word;
 	const TCHAR *m_Chars;
-	int m_Len;
+	size_t m_Len;
 public:
 	SingleWordLookup() {
 		m_Word = L"";
@@ -73,7 +73,7 @@ public:
 	{
 		return m_Chars;
 	}
-	int GetLength()
+	size_t GetLength()
 	{
 		return m_Len;
 	}
@@ -145,7 +145,7 @@ public:
 	COLORREF WORDBINDERCOLOR = 0x1F58DD;
 
 public:
-	Language(LPCSTR LanguageName, LPCSTR LanguageFile);
+	Language(const TCHAR* LanguageName, const TCHAR* LanguageFile);
 	~Language();
 	void LoadFile(LPCSTR filename);
 };

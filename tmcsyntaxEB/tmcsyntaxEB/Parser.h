@@ -13,8 +13,8 @@ private:
 	COLORREF *m_CharColors = NULL;
 	HookedCtrl *m_Ctrl = NULL;
 	Language *m_Language = NULL;
-	int m_DataLen = 65535;
-	int m_ReadAt = 0;
+	size_t m_DataLen = 65535;
+	size_t m_ReadAt = 0;
 public:
 	Parser();
 	~Parser();
@@ -25,7 +25,7 @@ public:
 		m_Ctrl = Ctrl;
 		
 	};
-	void Parse(int TextLen);
+	void Parse(size_t TextLen);
 	void RewindToBOL()
 	{
 		m_ReadAt = max(0, m_ReadAt - 1);
@@ -81,9 +81,9 @@ public:
 	}
 	bool DoBinary()
 	{
-		int startpos = m_ReadAt;
+		size_t startpos = m_ReadAt;
 		//are you sure?
-		int WordSize = m_Language->BINPREFIXES.ValidTCHAR((m_EBText + m_ReadAt));
+		size_t WordSize = m_Language->BINPREFIXES.ValidTCHAR((m_EBText + m_ReadAt));
 		if (WordSize)
 		{
 			COLORREF col = m_Language->NUMBERCOLOR;
@@ -126,9 +126,9 @@ public:
 	}
 	bool DoOctal()
 	{
-		int startpos = m_ReadAt;
+		size_t startpos = m_ReadAt;
 		//are you sure?
-		int WordSize = m_Language->OCTPREFIXES.ValidTCHAR((m_EBText + m_ReadAt));
+		size_t WordSize = m_Language->OCTPREFIXES.ValidTCHAR((m_EBText + m_ReadAt));
 		if (WordSize)
 		{
 			COLORREF col = m_Language->NUMBERCOLOR;
@@ -171,9 +171,9 @@ public:
 	}
 	bool DoHex()
 	{
-		int startpos = m_ReadAt;
+		size_t startpos = m_ReadAt;
 		//are you sure?
-		int WordSize = m_Language->HEXPREFIXES.ValidTCHAR((m_EBText + m_ReadAt));
+		size_t WordSize = m_Language->HEXPREFIXES.ValidTCHAR((m_EBText + m_ReadAt));
 		if (WordSize)
 		{
 			COLORREF col = m_Language->NUMBERCOLOR;
@@ -220,7 +220,7 @@ public:
 		bool did_e = false;
 		bool did_a_num = false;
 		COLORREF col = m_Language->NUMBERCOLOR;
-		int startpos = m_ReadAt;
+		size_t startpos = m_ReadAt;
 		while (m_ReadAt < m_DataLen)
 		{
 			TCHAR c = DATA_CHAR(m_EBText, m_ReadAt);
@@ -261,10 +261,10 @@ public:
 			}
 			else
 			{
-				int WordSize = m_Language->NUMSUFFIXES.ValidTCHAR((m_EBText + m_ReadAt));
+				size_t WordSize = m_Language->NUMSUFFIXES.ValidTCHAR((m_EBText + m_ReadAt));
 				if (WordSize>0)
 				{
-					if (m_Language->SPLITTERS.Valid(m_ReadAt + WordSize))
+					if (m_Language->SPLITTERS.Valid(DATA_CHAR(m_EBText,m_ReadAt + WordSize)))
 					{
 						//flag prefix
 						repeat(WordSize)
@@ -424,18 +424,18 @@ public:
 		}
 		return true;
 	}
-	void ColorizeWord( TCHARString word, int wordStart, COLORREF col)
+	void ColorizeWord( TCHARString word, size_t wordStart, COLORREF col)
 	{
-		int wordend = wordStart + word.length();
-		for (int i = wordStart; i < wordend; i++)
+		size_t wordend = wordStart + word.length();
+		for (size_t i = wordStart; i < wordend; i++)
 		{
 			DATA_SET(m_CharColors, i, col);
 		}
 	};
-	void SetWordColor(int wordStart, TCHARString word)
+	void SetWordColor(size_t wordStart, TCHARString word)
 	{
 
-		int wordend = wordStart + word.length();
+		size_t wordend = wordStart + word.length();
 		//match word to one of the dictionary to set the color of the word
 		COLORREF col = m_Language->UNKNOWNWORDCOLOR;
 		if (0)
@@ -467,7 +467,7 @@ public:
 			col = m_Language->CLASSFUNCCOLOR;
 		}
 
-		for (int i = wordStart; i < wordend; i++)
+		for (size_t i = wordStart; i < wordend; i++)
 		{
 			DATA_SET(m_CharColors, i, col);
 		}

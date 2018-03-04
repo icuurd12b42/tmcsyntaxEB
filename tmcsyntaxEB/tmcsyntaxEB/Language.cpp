@@ -2,11 +2,11 @@
 #include "Language.h"
 
 
-Language::Language(LPCSTR LanguageName, LPCSTR LanguageFile)
+Language::Language(const TCHAR* LanguageName, const TCHAR* LanguageFile)
 {
-	m_LanguageName = LPCSTRtoTCHARString(LanguageName);
-	m_LanguageFile = LPCSTRtoTCHARString(LanguageFile);
-	LoadFile(LanguageFile);
+	m_LanguageName = TCHARString(LanguageName);
+	m_LanguageFile = TCHARString(LanguageFile);
+	LoadFile(TCHARStringToString(m_LanguageFile).c_str());
 }
 
 
@@ -49,7 +49,11 @@ void Language::LoadFile(LPCSTR filename)
 	inFile.open(filename);
 	if (!inFile)
 	{
-		MessageBox(GetActiveWindow(), L"Ooops!\r\nA request to load a language file failed. Syntax Highlithing for the language may not work properly.", L"TMCSyntaxEB.dll", MB_ICONINFORMATION | MB_OK);
+		string t = "Ooops!\r\nA request to load a language file failed. Syntax Highlithing for the language may not work properly.";
+		t += "\r\n";
+		t += filename;
+		TCHARString TCs = stringToTCHARString(t);
+		MessageBox(GetActiveWindow(), TCs.c_str(), L"TMCSyntaxEB.dll", MB_ICONINFORMATION | MB_OK);
 		return;
 	}
 	string line;

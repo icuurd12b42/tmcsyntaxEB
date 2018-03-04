@@ -79,7 +79,9 @@ void HookedCtrl::OnUnHook()
 	if (IsWindow(m_hWnd)) {
 		if (IsWindowVisible(m_hWnd))
 		{
-			SetWindowLong(m_hWnd, GWL_WNDPROC, (LONG_PTR)m_origWndProc);
+			
+			SetWindowLongPtr(m_hWnd, GWLP_WNDPROC, (LONG_PTR)m_origWndProc);
+			//SetWindowLong(m_hWnd, GWL_WNDPROC, (LONG_PTR)m_origWndProc);
 			RedrawWindow(m_hWnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE);
 		}
 	}
@@ -90,10 +92,10 @@ LRESULT HookedCtrl::DirectSendMessage(UINT message, WPARAM wParam, LPARAM lParam
 	return CallWindowProc(m_origWndProc, m_hWnd, message, wParam, lParam);
 }
 
-void HookedCtrl::InvalidateSelectRegion(int SelStart, int SelEnd)
+void HookedCtrl::InvalidateSelectRegion(size_t SelStart, size_t SelEnd)
 {
-	int selStart = SelStart;
-	int selEnd = SelEnd;
+	size_t selStart = SelStart;
+	size_t selEnd = SelEnd;
 	if (selStart > selEnd)	{
 		swap(selStart, selEnd);
 	}
@@ -106,7 +108,7 @@ void HookedCtrl::InvalidateSelectRegion(int SelStart, int SelEnd)
 	}
 }
 
-void HookedCtrl::InvalidateEditChar(int CharPos)
+void HookedCtrl::InvalidateEditChar(size_t CharPos)
 {
 	RECT rect = this->GetClientRect();
 	rect.top = max(rect.top, this->GetPosFromChar(CharPos).y);
@@ -198,8 +200,8 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	//set the select color
 	SetBkMode(hdc, OPAQUE);
 	//draw the selection 
-	int selStart = m_SelStart;
-	int selEnd = m_SelEnd;
+	size_t selStart = m_SelStart;
+	size_t selEnd = m_SelEnd;
 	if (selStart > selEnd)	{
 		swap(selStart, selEnd);
 	}
@@ -219,12 +221,12 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		PosFromChar EndPos = this->GetPosFromChar(selEnd - charOff);
 		
 		//get the line pos for those too
-		int StartLine = this->GetLineFromPos(selStart);
-		int EndLine = this->GetLineFromPos(selEnd - charOff);
+		size_t StartLine = this->GetLineFromPos(selStart);
+		size_t EndLine = this->GetLineFromPos(selEnd - charOff);
 
 		//add the width of the last character
 		if (charOff){
-			int len = this->GetEBLine(EndLine);
+			size_t len = this->GetEBLine(EndLine);
 			GetCharWidth32(hdc,	m_EBLine[len-1],m_EBLine[len - 1], &charOff);
 			EndPos.x += charOff + 10;
 		}
@@ -233,7 +235,7 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		short lineXStart, lineYStart, lineXEnd, lineYEnd;
 		lineYStart = StartPos.y;
 		
-		for (int i = StartLine; i <= EndLine; i++)	{
+		for (size_t i = StartLine; i <= EndLine; i++)	{
 			//default
 			lineXStart = 0;
 			lineXEnd = 0;
@@ -241,9 +243,9 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 			//ignore lines above dirty region
 			if (lineYEnd > rect.top) {
 				//get the extent of the selection from start to end of line, 
-				int len = this->GetEBLine(i);
+				size_t len = this->GetEBLine(i);
 				if (len) {
-					int CharPos = this->GetFirstPosInLine(i);
+					size_t CharPos = this->GetFirstPosInLine(i);
 					lineXStart = 0;
 					CharPos = CharPos + len - 1;
 					PosFromChar position = this->GetPosFromChar(CharPos);
@@ -290,33 +292,33 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	//Text Drawing
 	{
 		CharFromPos charFromPos = this->GetCharFromPos(rect.left, rect.top);
-		int FirstLine = charFromPos.LinePos;
+		size_t FirstLine = charFromPos.LinePos;
 
-		int LineCount = this->GetLineCount(); 
+		size_t LineCount = this->GetLineCount();
 		short posX = 0,
 			  posY = 0;
-		for(int i = FirstLine; i< LineCount; i++){
+		for(size_t i = FirstLine; i< LineCount; i++){
 			//get the line
-			int len = this->GetEBLine(i);
+			size_t len = this->GetEBLine(i);
 
 			//Setup Word information variables
 			COLORREF color = -1;
-			int accumulatedlen = 0;
+			size_t accumulatedlen = 0;
 			int wordPosX = 0;
-			int wordStarPosOnLine = 0;
-			int wordStarPosinBox = 0;
+			size_t wordStarPosOnLine = 0;
+			size_t wordStarPosinBox = 0;
 			int wordPosY = 0;
 			//if line is not empty
 			if (len){
-				int FirstCharIndexInLine = this->GetFirstPosInLine(i);
+				size_t FirstCharIndexInLine = this->GetFirstPosInLine(i);
 				
 				//end position in buffer
-				int EndPos = FirstCharIndexInLine + len;
+				size_t EndPos = FirstCharIndexInLine + len;
 				//I also need the position on the line buffer
-				int CharPosOnLine = 0;
+				size_t CharPosOnLine = 0;
 			
 				//for each character in line
-				for (int cat = FirstCharIndexInLine; cat < EndPos; cat++){
+				for (size_t cat = FirstCharIndexInLine; cat < EndPos; cat++){
 					//get position for the character using it's overall position in buffer
 					PosFromChar position = this->GetPosFromChar(cat);
 					posX = position.x;
@@ -335,7 +337,7 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 							//but first draw the word accumulated
 							if (accumulatedlen != 0){
 								SetTextColor(hdc, m_CharColors[wordStarPosinBox]);
-								TextOut(hdc, wordPosX, wordPosY, (TCHAR*)(m_EBLine + wordStarPosOnLine), accumulatedlen);
+								TextOut(hdc, wordPosX, wordPosY, (TCHAR*)(m_EBLine + wordStarPosOnLine), (int)accumulatedlen);
 								accumulatedlen = 0;
 							}
 							break;
@@ -349,7 +351,7 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 								if (accumulatedlen != 0)
 								{
 									SetTextColor(hdc, m_CharColors[wordStarPosinBox]);
-									TextOut(hdc, wordPosX, wordPosY, (TCHAR*)(m_EBLine + wordStarPosOnLine), accumulatedlen);
+									TextOut(hdc, wordPosX, wordPosY, (TCHAR*)(m_EBLine + wordStarPosOnLine), (int) accumulatedlen);
 								}
 								//setup for next word
 								accumulatedlen = 0;
@@ -370,7 +372,7 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 				//Dangling word to process?
 				if (accumulatedlen != 0) {
 					SetTextColor(hdc, m_CharColors[wordStarPosinBox]);
-					TextOut(hdc, wordPosX, wordPosY, (TCHAR*)(m_EBLine + wordStarPosOnLine), accumulatedlen);
+					TextOut(hdc, wordPosX, wordPosY, (TCHAR*)(m_EBLine + wordStarPosOnLine), (int) accumulatedlen);
 				}
 			}
 		
@@ -423,13 +425,13 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 			 DeleteObject(BackBrush);
 
 			 int TextY = 0;
-			 int LineAt = this->DirectSendMessage(EM_GETFIRSTVISIBLELINE, 0, 0) + 1;
+			 size_t LineAt = this->DirectSendMessage(EM_GETFIRSTVISIBLELINE, 0, 0) + 1;
 			 SetTextColor(hdc, m_LineNumberColor);
 			 wstring t;
 			 while (TextY < rcCli.bottom)
 			 {
 				 t = to_wstring(LineAt);
-				 TextOut(hdc, width - 1, TextY, t.c_str(), t.length());
+				 TextOut(hdc, width - 1, TextY, t.c_str(), (UINT) t.length());
 				 TextY += m_TextHeight;
 				 LineAt++;
 			 }
@@ -478,7 +480,7 @@ LRESULT HookedCtrl::Do_WM_PAINT(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	return 0L;
 }
 extern ZLoadedMap LoadedLanguage;
-extern string SelectedLanguage;
+extern TCHARString SelectedLanguage;
 LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (m_Language != NULL)
@@ -637,7 +639,7 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 						{
 							ItemName = it->first;
 							m_Language = LoadedLanguage[ItemName];
-							SelectedLanguage = TCHARStringToString(ItemName);
+							SelectedLanguage = ItemName;
 							break;
 						}
 						
@@ -690,12 +692,12 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 				if (wParam != NULL)
 				{
 					DWORD *t = (DWORD *)wParam;
-					*t = m_SelStart;
+					*t = (DWORD) m_SelStart;
 				}
 				if (lParam != NULL)
 				{
 					DWORD *t = (DWORD *)lParam;
-					*t = m_SelEnd;
+					*t = (DWORD) m_SelEnd;
 				}
 				return MAKELPARAM((short)m_SelStart, (short)m_SelEnd);
 				//EB_SET_SEL(m_SelStart, m_SelEnd);
@@ -1018,7 +1020,7 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 					{
 						CharFromPos charFromPos = this->GetCharFromPos(m_ScrollMouseX, m_ScrollMouseY);
 						if (abs(hscroll)) {
-							int OldPos = charFromPos.CharPos;
+							size_t OldPos = charFromPos.CharPos;
 
 							repeat(abs(m_scrollHDirection)) {
 								charFromPos.CharPos += hscroll;
@@ -1031,7 +1033,7 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
 						}
 						//invalidate the selection for redrawing it
-						int OldSelEnd = m_SelEnd;
+						size_t OldSelEnd = m_SelEnd;
 						this->SetSelection(m_SelStart, charFromPos.CharPos);
 						if (OldSelEnd != charFromPos.CharPos)
 						{
@@ -1085,11 +1087,11 @@ LRESULT HookedCtrl::DoWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 					{
 						CharFromPos charFromPos = this->GetCharFromPos(m_ScrollMouseX, m_ScrollMouseY);
 						//invalidate the selection for redrawing it
-						int OldSelEnd = m_SelEnd;
+						size_t OldSelEnd = m_SelEnd;
 						if (m_WordSelectDrag)
 						{
 							m_SelEnd = charFromPos.CharPos;
-							int OldSelStart = m_SelStart;
+							size_t OldSelStart = m_SelStart;
 							if (m_SelEnd < m_SelStart)
 							{
 								this->CaretMoveChar(1, 1, 0);

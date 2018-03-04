@@ -26,8 +26,8 @@ typedef stack<EditAction*> EditActions;
 class CharFromPos
 {
 public:
-	int CharPos = 0;
-	int LinePos = 0;
+	size_t CharPos = 0;
+	size_t LinePos = 0;
 };
 class PosFromChar
 {
@@ -40,8 +40,8 @@ class HookedCtrl
 private:
 	HWND m_hWnd = NULL;
 	WNDPROC m_origWndProc = NULL;
-	int m_SelStart = 0;
-	int m_SelEnd = 0;
+	size_t m_SelStart = 0;
+	size_t m_SelEnd = 0;
 	short m_TabSize = 16;
 	TCHAR m_EBText[66536]; //not a typo, allocate more to allow overun in the parser searching for text, 1000 more bytes should be enough
 	TCHAR m_EBTextMirror[65536];
@@ -87,43 +87,43 @@ public:
 
 	void SetLanguage(Language *Language) { m_Language = Language; };
 
-	void InvalidateSelectRegion(int SelStart, int SelEnd);
+	void InvalidateSelectRegion(size_t SelStart, size_t SelEnd);
 
 	void InvalidateSelectRegion() { InvalidateSelectRegion(m_SelStart, m_SelEnd); };
 
-	void SetSelection(int SelStart, int SelEnd) {
+	void SetSelection(size_t SelStart, size_t SelEnd) {
 		m_SelStart = CAP_0_64k(SelStart);
 		m_SelEnd = CAP_0_64k(SelEnd);
 		DirectSendMessage(EM_SETSEL, m_SelEnd, m_SelEnd);
 	};
 
-	int GetLineCount() { return DirectSendMessage(EM_GETLINECOUNT, NULL, NULL); };
+	size_t GetLineCount() { return DirectSendMessage(EM_GETLINECOUNT, NULL, NULL); };
 
-	int GetLineLengthFromPos(int CharPos) { return DirectSendMessage(EM_LINELENGTH, CharPos, NULL); };
+	size_t GetLineLengthFromPos(size_t CharPos) { return DirectSendMessage(EM_LINELENGTH, CharPos, NULL); };
 
-	int GetLineFromPos(int CharPos) { return DirectSendMessage(EM_LINEFROMCHAR, CharPos, 0); };
+	size_t GetLineFromPos(size_t CharPos) { return DirectSendMessage(EM_LINEFROMCHAR, CharPos, 0); };
 
-	int GetFirstPosInLine(int LinePos) { return DirectSendMessage(EM_LINEINDEX, LinePos, 0); }
+	size_t GetFirstPosInLine(size_t LinePos) { return DirectSendMessage(EM_LINEINDEX, LinePos, 0); }
 
-	int GetTextLenght() { return DirectSendMessage(WM_GETTEXTLENGTH, 0, 0); };
+	size_t GetTextLenght() { return DirectSendMessage(WM_GETTEXTLENGTH, 0, 0); };
 
-	int GetFirstVisibleLine() { return DirectSendMessage(EM_GETFIRSTVISIBLELINE, 0, 0); };
+	size_t GetFirstVisibleLine() { return DirectSendMessage(EM_GETFIRSTVISIBLELINE, 0, 0); };
 
 	RECT GetClientRect() { RECT rect; DirectSendMessage(EM_GETRECT, 0, (LPARAM)&rect); return rect; };
 
-	void CaretSetPosition(int Pos, int Select = 0) {
-		int OldSelStart = m_SelStart;
+	void CaretSetPosition(size_t Pos, int Select = 0) {
+		size_t OldSelStart = m_SelStart;
 		SetSelection(Pos, Pos);
 		if (Select) m_SelStart = OldSelStart;
 	};
 	bool CapSelEndToTextLimit()
 	{
-		int MaxSize = GetTextLenght();
+		size_t MaxSize = GetTextLenght();
 		m_SelEnd = CLAMP(0, MaxSize, m_SelEnd);
 		return (m_SelEnd == 0 || m_SelEnd == MaxSize);
 	}
-	bool CaretMoveChar(int direction, int Word = 0, int Select = 0) {
-		int MaxSize = GetTextLenght();
+	bool CaretMoveChar(size_t direction, int Word = 0, int Select = 0) {
+		size_t MaxSize = GetTextLenght();
 		if (Word == 0)
 		{
 			m_SelEnd += direction;
@@ -134,8 +134,8 @@ public:
 		}
 		else
 		{
-			int rightoff;
-			int leftoff;
+			size_t rightoff;
+			size_t leftoff;
 			bool LeftValid;
 			bool rightvalid;
 			bool HitEnd;
@@ -169,10 +169,10 @@ public:
 		return true;
 	};
 	
-	void CaretMoveLine(int direction, int Select = 0) {
-								int LastLine = this->GetLineCount() - 1;
-								int LineTo = max(0,min(LastLine, this->GetLineFromPos(m_SelEnd) + direction));
-								int pos = this->GetFirstPosInLine(LineTo);
+	void CaretMoveLine(size_t direction, int Select = 0) {
+		size_t LastLine = this->GetLineCount() - 1;
+		size_t LineTo = max(0,min(LastLine, this->GetLineFromPos(m_SelEnd) + direction));
+		size_t pos = this->GetFirstPosInLine(LineTo);
 								PosFromChar caretCoord = this->GetPosFromChar(m_SelEnd);
 								PosFromChar charCoord;
 								do {
@@ -198,42 +198,42 @@ public:
 								}
 		
 	};
-	void PageScroll(int direction, int Control = 0,  int Select = 0) {
-								int LineOffset = this->GetLineFromPos(m_SelEnd) - this->GetFirstVisibleLine();
-								PosFromChar caretCoord = this->GetPosFromChar(m_SelEnd);
-								if (direction == -1)
-								{
-									if (Control)
-									{
-										DirectSendMessage(WM_HSCROLL, MAKEWPARAM(SB_PAGEUP, 0), 0);
-									}
-									else
-									{
-										DirectSendMessage(WM_VSCROLL, MAKEWPARAM(SB_PAGEUP, 0), 0);
-									}
-								}
-								else
-								{
-									if (Control)
-									{
-										DirectSendMessage(WM_HSCROLL, MAKEWPARAM(SB_PAGEDOWN, 0), 0);
-									}
-									else
-									{
-										DirectSendMessage(WM_VSCROLL, MAKEWPARAM(SB_PAGEDOWN, 0), 0);
-									}
-								}
-								int NewFirstLine = this->GetFirstVisibleLine();
+	void PageScroll(size_t direction, int Control = 0,  int Select = 0) {
+		size_t LineOffset = this->GetLineFromPos(m_SelEnd) - this->GetFirstVisibleLine();
+		PosFromChar caretCoord = this->GetPosFromChar(m_SelEnd);
+		if (direction == -1)
+		{
+			if (Control)
+			{
+				DirectSendMessage(WM_HSCROLL, MAKEWPARAM(SB_PAGEUP, 0), 0);
+			}
+			else
+			{
+				DirectSendMessage(WM_VSCROLL, MAKEWPARAM(SB_PAGEUP, 0), 0);
+			}
+		}
+		else
+		{
+			if (Control)
+			{
+				DirectSendMessage(WM_HSCROLL, MAKEWPARAM(SB_PAGEDOWN, 0), 0);
+			}
+			else
+			{
+				DirectSendMessage(WM_VSCROLL, MAKEWPARAM(SB_PAGEDOWN, 0), 0);
+			}
+		}
+		size_t NewFirstLine = this->GetFirstVisibleLine();
 
-								int NewLine = this->GetFirstVisibleLine() + LineOffset;
-								int LineTo = CLAMP(0,this->GetFirstVisibleLine() + LineOffset, this->GetLineCount()-1);
-								int pos = this->GetFirstPosInLine(LineTo);
-								PosFromChar charCoord;
-								do {
-									charCoord = this->GetPosFromChar(pos);
-									pos++;
-								} while (charCoord.x < caretCoord.x && m_EBText[pos] != '\0' && m_EBText[pos] != '\n');
-								this->CaretSetPosition(pos - 1, Select);
+		size_t NewLine = this->GetFirstVisibleLine() + LineOffset;
+		size_t LineTo = CLAMP(0,this->GetFirstVisibleLine() + LineOffset, this->GetLineCount()-1);
+		size_t pos = this->GetFirstPosInLine(LineTo);
+		PosFromChar charCoord;
+		do {
+			charCoord = this->GetPosFromChar(pos);
+			pos++;
+		} while (charCoord.x < caretCoord.x && m_EBText[pos] != '\0' && m_EBText[pos] != '\n');
+		this->CaretSetPosition(pos - 1, Select);
 	};
 	void ScrollToCaret() { DirectSendMessage(EM_SCROLLCARET, 0, 0); };
 
@@ -244,9 +244,9 @@ public:
 								return charFromPos;
 	};
 
-	CharFromPos GetCharFromPos(int x, int y) { return GetCharFromPos(MAKELPARAM(x, y)); };
+	CharFromPos GetCharFromPos(size_t x, size_t y) { return GetCharFromPos(MAKELPARAM(x, y)); };
 
-	PosFromChar GetPosFromChar(int CharOffset) {
+	PosFromChar GetPosFromChar(size_t CharOffset) {
 								PosFromChar posFromChar;
 								LRESULT lresult = DirectSendMessage(EM_POSFROMCHAR, CharOffset, 0);
 								posFromChar.x = LOWORD(lresult); posFromChar.y = HIWORD(lresult);
@@ -255,16 +255,16 @@ public:
 	
 
 
-	int GetEBLine(int LinePos) {
+	size_t GetEBLine(size_t LinePos) {
 								WORD *FirstWord = (WORD *)m_EBLine;
 								*FirstWord = 65535; //set the first word of TextBuff
-								int len = DirectSendMessage(EM_GETLINE, LinePos, (LPARAM)m_EBLine);
+								size_t len = DirectSendMessage(EM_GETLINE, LinePos, (LPARAM)m_EBLine);
 								m_EBLine[len] = 0; //end of string null
 								return len;
 	};
 
 	
-	void InvalidateEditChar(int CharPos);
+	void InvalidateEditChar(size_t CharPos);
 
 
 	void EditCopy() { 
@@ -421,7 +421,7 @@ public:
 		
 		if (dir == 0) return;
 		//setup the position for the start of search
-		int pos = m_SelEnd;
+		size_t pos = m_SelEnd;
 		if (leftrightOfCarret == 1 && dir == -1) pos+=-1;
 		if (leftrightOfCarret == 1 && dir == 1) pos+=1;
 		if (leftrightOfCarret == -1 && dir == -1) pos+=-2;
@@ -460,11 +460,11 @@ public:
 		
 	};
 
-	TCHARString GetTextPart(int startpos, int endpos)
+	TCHARString GetTextPart(size_t startpos, size_t endpos)
 	{
 		TCHARString ret = L"";
 		TCHAR t[] = { 0,0 };
-		for (int i = startpos; i < endpos; i++)
+		for (size_t i = startpos; i < endpos; i++)
 		{
 			t[0] = m_EBText[i];
 			ret += t;
@@ -472,14 +472,14 @@ public:
 		return ret;
 	}
 	void EditFind(int matchcase = 0, int shift = 0) {
-		int start = min(m_SelStart, m_SelEnd);
-		int end = max(m_SelStart, m_SelEnd);
+		size_t start = min(m_SelStart, m_SelEnd);
+		size_t end = max(m_SelStart, m_SelEnd);
 
 		TCHARString SearchFor = this->GetTextPart(start, end);
 		if (SearchFor == L"") return;
-		int EbLen = this->GetTextLenght();
-		int slen = SearchFor.length();
-		int dir = 1;
+		size_t EbLen = this->GetTextLenght();
+		size_t slen = SearchFor.length();
+		size_t dir = 1;
 		if (shift) dir = -1;
 		start += dir;
 		end += dir;
@@ -515,15 +515,15 @@ public:
 	};
 	void EditIndent(int UnIndent = 0)
 	{
-		int start = min(m_SelStart, m_SelEnd);
-		int end = max(m_SelStart, m_SelEnd);
-		int startline = this->GetLineFromPos(start);
-		int endline = this->GetLineFromPos(end);
-		int FirstPosLastLine = this->GetFirstPosInLine(endline);
+		size_t start = min(m_SelStart, m_SelEnd);
+		size_t end = max(m_SelStart, m_SelEnd);
+		size_t startline = this->GetLineFromPos(start);
+		size_t endline = this->GetLineFromPos(end);
+		size_t FirstPosLastLine = this->GetFirstPosInLine(endline);
 		if (FirstPosLastLine == end) endline--;
 		m_SelEnd = start;
 		//SendMessage(this->m_hWnd, WM_SETREDRAW, FALSE, 0);
-		for (int i = endline; i >= startline; i--)
+		for (size_t i = endline; i >= startline; i--)
 		{
 			
 			//this->CaretMoveStartOfLine();
@@ -576,7 +576,7 @@ public:
 		}
 		m_SelEnd = start;
 		this->CaretMoveStartOfLine();
-		for (int i = startline; i <= endline; i++)
+		for (size_t i = startline; i <= endline; i++)
 		{
 			this->CaretMoveLine(1, 1);
 		}
@@ -586,15 +586,15 @@ public:
 	};
 	void EditComment(int UnComent = 0)
 	{
-		int start = min(m_SelStart, m_SelEnd);
-		int end = max(m_SelStart, m_SelEnd);
-		int startline = this->GetLineFromPos(start);
-		int endline = this->GetLineFromPos(end);
-		int FirstPosLastLine = this->GetFirstPosInLine(endline);
+		size_t start = min(m_SelStart, m_SelEnd);
+		size_t end = max(m_SelStart, m_SelEnd);
+		size_t startline = this->GetLineFromPos(start);
+		size_t endline = this->GetLineFromPos(end);
+		size_t FirstPosLastLine = this->GetFirstPosInLine(endline);
 		if (FirstPosLastLine == end) endline--;
 		m_SelEnd = start;
 		//SendMessage(this->m_hWnd, WM_SETREDRAW, FALSE, 0);
-		for (int i = endline; i >= startline; i--)
+		for (size_t i = endline; i >= startline; i--)
 		{
 
 			//this->CaretMoveStartOfLine();
@@ -619,7 +619,7 @@ public:
 		}
 		m_SelEnd = start;
 		this->CaretMoveStartOfLine();
-		for (int i = startline; i <= endline; i++)
+		for (size_t i = startline; i <= endline; i++)
 		{
 			this->CaretMoveLine(1, 1);
 		}

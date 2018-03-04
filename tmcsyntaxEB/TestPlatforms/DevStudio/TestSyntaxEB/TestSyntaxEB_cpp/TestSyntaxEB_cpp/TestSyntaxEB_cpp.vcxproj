@@ -20,34 +20,33 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{5F1BD175-9ED6-4139-AFAD-72E2AEA96BD3}</ProjectGuid>
+    <ProjectGuid>{ABF66837-95A9-4F4F-ACA6-52111748D7C4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>tmcsyntaxEB</RootNamespace>
+    <RootNamespace>TestSyntaxEBcpp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
-    <ProjectName>tmcsyntaxEB</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -89,35 +88,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;tmcsyntaxEB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <CompileAsManaged>
-      </CompileAsManaged>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <MinimalRebuild>true</MinimalRebuild>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <PrecompiledHeaderOutputFile>$(ProjectDir)pch\x86\Debug\$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(ProjectDir)pdb\x86\Debug\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <ObjectFileName>$(ProjectDir)obj\x86\Debug\</ObjectFileName>
-      <BrowseInformationFile>$(ProjectDir)bif\x86\Debug\</BrowseInformationFile>
-      <AssemblerListingLocation>$(ProjectDir)asm\x86\Debug\</AssemblerListingLocation>
-      <XMLDocumentationFileName>$(ProjectDir)obj\xml\</XMLDocumentationFileName>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ImportLibrary>$(ProjectDir)lib\x86\Debug\$(TargetName).lib</ImportLibrary>
-      <ProgramDatabaseFile>$(ProjectDir)pdb\x86\Debug\$(TargetName).pdb</ProgramDatabaseFile>
-      <ProfileGuidedDatabase>$(ProjectDir)pgd\x86\Debug\$(TargetName).pgd</ProfileGuidedDatabase>
-      <OutputFile>$(ProjectDir)Bin\x86\Debug\$(TargetName)$(TargetExt)</OutputFile>
-      <ManifestFile>$(ProjectDir)man\x86\Debug\$(TargetName)$(TargetExt).intermediate.manifest</ManifestFile>
     </Link>
-    <Xdcmake>
-      <OutputFile>$(ProjectDir)obj\xml\x86\Debug\$(TargetName).xml</OutputFile>
-    </Xdcmake>
-    <BuildLog>
-      <Path>tlog\$(MSBuildProjectName).log</Path>
-    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -125,29 +102,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;tmcsyntaxEB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>$(ProjectDir)pch\x64\Debug\$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(ProjectDir)pdb\x64\Debug\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <ObjectFileName>$(ProjectDir)obj\x64\Debug\</ObjectFileName>
-      <BrowseInformationFile>$(ProjectDir)bif\x64\Debug\</BrowseInformationFile>
-      <AssemblerListingLocation>$(ProjectDir)asm\x64\Debug\</AssemblerListingLocation>
-      <XMLDocumentationFileName>$(ProjectDir)obj\xml\</XMLDocumentationFileName>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(ProjectDir)pdb\x64\Debug\$(TargetName).pdb</ProgramDatabaseFile>
-      <ProfileGuidedDatabase>$(ProjectDir)pgd\x64\Debug\$(TargetName).pgd</ProfileGuidedDatabase>
-      <OutputFile>$(ProjectDir)Bin\x64\Debug\$(TargetName)$(TargetExt)</OutputFile>
-      <ManifestFile>$(ProjectDir)man\x64\Debug\$(TargetName)$(TargetExt).intermediate.manifest</ManifestFile>
-      <ImportLibrary>$(ProjectDir)lib\x64\Debug\$(TargetName).lib</ImportLibrary>
     </Link>
-    <Xdcmake>
-      <OutputFile>$(ProjectDir)obj\xml\x64\Debug\$(TargetName).xml</OutputFile>
-    </Xdcmake>
-    <BuildLog>
-      <Path>tlog\$(MSBuildProjectName).log</Path>
-    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -157,31 +118,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;tmcsyntaxEB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>$(ProjectDir)pch\x86\Release\$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(ProjectDir)pdb\x86\Release\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <ObjectFileName>$(ProjectDir)obj\x86\Release\</ObjectFileName>
-      <BrowseInformationFile>$(ProjectDir)bif\x86\Release\</BrowseInformationFile>
-      <AssemblerListingLocation>$(ProjectDir)asm\x86\Release\</AssemblerListingLocation>
-      <XMLDocumentationFileName>$(ProjectDir)obj\xml\</XMLDocumentationFileName>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <OutputFile>$(ProjectDir)Bin\x86\Release\$(TargetName)$(TargetExt)</OutputFile>
-      <ImportLibrary>$(ProjectDir)lib\x86\Release\$(TargetName).lib</ImportLibrary>
-      <ProgramDatabaseFile>$(ProjectDir)pdb\x86\Release\$(TargetName).pdb</ProgramDatabaseFile>
-      <ProfileGuidedDatabase>$(ProjectDir)pgd\x86\Release\$(TargetName).pgd</ProfileGuidedDatabase>
-      <ManifestFile>$(ProjectDir)man\x86\Release\$(TargetName)$(TargetExt).intermediate.manifest</ManifestFile>
     </Link>
-    <Xdcmake>
-      <OutputFile>$(ProjectDir)obj\xml\x86\Release\$(TargetName).xml</OutputFile>
-    </Xdcmake>
-    <BuildLog>
-      <Path>tlog\$(MSBuildProjectName).log</Path>
-    </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -191,57 +136,39 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;tmcsyntaxEB_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeaderOutputFile>$(ProjectDir)pch\x64\Release\$(TargetName).pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(ProjectDir)pdb\x64\Release\vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
-      <ObjectFileName>$(ProjectDir)obj\x64\Release\</ObjectFileName>
-      <BrowseInformationFile>$(ProjectDir)bif\x64\Release\</BrowseInformationFile>
-      <AssemblerListingLocation>$(ProjectDir)asm\x64\Release\</AssemblerListingLocation>
-      <XMLDocumentationFileName>$(ProjectDir)obj\xml\</XMLDocumentationFileName>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(ProjectDir)pdb\x64\Release\$(TargetName).pdb</ProgramDatabaseFile>
-      <ProfileGuidedDatabase>$(ProjectDir)pgd\x64\Release$$(TargetName).pgd</ProfileGuidedDatabase>
-      <OutputFile>$(ProjectDir)Bin\x64\Release\$(TargetName)$(TargetExt)</OutputFile>
-      <ManifestFile>$(ProjectDir)man\x64\Release\$(TargetName)$(TargetExt).intermediate.manifest</ManifestFile>
-      <ImportLibrary>$(ProjectDir)lib\x64\Release\$(TargetName).lib</ImportLibrary>
     </Link>
-    <Xdcmake>
-      <OutputFile>$(ProjectDir)obj\xml\x64\Release\$(TargetName).xml</OutputFile>
-    </Xdcmake>
-    <BuildLog>
-      <Path>tlog\$(MSBuildProjectName).log</Path>
-    </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="debug.h" />
-    <ClInclude Include="HookedCtrl.h" />
-    <ClInclude Include="Language.h" />
-    <ClInclude Include="Parser.h" />
+    <ClInclude Include="LateBindingTmcSyntaxEB.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TCHARStringHelpers.h" />
+    <ClInclude Include="TestSyntaxEB_cpp.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="debug.cpp" />
-    <ClCompile Include="HookedCtrl.cpp" />
-    <ClCompile Include="Language.cpp" />
-    <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="TCHARStringHelpers.cpp" />
-    <ClCompile Include="tmcsyntaxEB.cpp" />
+    <ClCompile Include="LateBindingTmcSyntaxEB.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TestSyntaxEB_cpp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\cpp.hint" />
+    <ResourceCompile Include="TestSyntaxEB_cpp.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico" />
+    <Image Include="TestSyntaxEB_cpp.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

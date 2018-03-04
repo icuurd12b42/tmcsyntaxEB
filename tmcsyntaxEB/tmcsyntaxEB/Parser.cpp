@@ -12,7 +12,7 @@ Parser::~Parser()
 {
 }
 
-void Parser::Parse(int TextLen) {
+void Parser::Parse(size_t TextLen) {
 	m_ReadAt = 0;
 	m_DataLen = TextLen;
 	m_Language = m_Ctrl->m_Language;
@@ -113,7 +113,7 @@ void Parser::Parse(int TextLen) {
 				if ((c == ')' || c == ']' || c == '\'' || c == '\"'))
 				{
 					//are we on a . or ->?
-					int WordSize = 0;
+					size_t WordSize = 0;
 					if (m_Language->BINDERSPRECHECK.Valid(DATA_CHAR(m_EBText, m_ReadAt)))
 					{
 						//are you sure?
@@ -168,19 +168,19 @@ void Parser::CompoundString(bool ClassFuncsOnly)
 	bool IsStaticClass = false;
 	bool IsClassFunc = false;
 	bool ThereIsADot = false;
-	int wordcount = 0;
+	size_t wordcount = 0;
 	TCHARString fullname; //for the full
-	int fullnamestart = m_ReadAt;
+	size_t fullnamestart = m_ReadAt;
 	TCHARString ThisName;
 	//for this word and any subsequent . word like Something.Something.something
 	do {
-		int thisnamestart = m_ReadAt;
+		size_t thisnamestart = m_ReadAt;
 		//get the word
 		TCHARString ThisName = DoValidName();
 		//Just read [something]
 
 		//check if joiner something[->]
-		int WordSize = 0;
+		size_t WordSize = 0;
 		if (m_Language->BINDERSPRECHECK.Valid(DATA_CHAR(m_EBText, m_ReadAt)))
 		{
 
