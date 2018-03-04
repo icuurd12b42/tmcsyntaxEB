@@ -39,7 +39,10 @@ In theory, you simply need to call the dll functions to hook to an existing wind
 
 All exported functions are non mangled cdecl convention so you can statically link in your project or load the library manually.
 
-+ export void TMC_SEB_LoadLanguage(LPCSTR LanguageName, LPCSTR LanguageFile)
+Functions that pass or return strings have a for wide char and Ansi char version. Function() is the wide char and FuncrionA() is the Ansi version.
+
++ export void TMC_SEB_LoadLanguage(const TCHAR* LanguageName, const TCHAR* LanguageFile)
++ export void TMC_SEB_LoadLanguageA(LPCSTR LanguageName, LPCSTR LanguageFile)
 
   This functions loads a language file in the system. 
 
@@ -49,7 +52,8 @@ All exported functions are non mangled cdecl convention so you can statically li
 
   Commonly you would Load all your files at startup. it is also commont to uses the filename without extention for the Language Name
 
-+ export void TMC_SEB_SetHilite(HWND hWnd, LPCSTR LanguageName, DWORD LineNumberBackColor, DWORD LineNumberColor)
++ export void TMC_SEB_SetHilite(HWND hWnd, const TCHAR* LanguageName, DWORD LineNumberBackColor, DWORD LineNumberColor)
++ export void TMC_SEB_SetHiliteA(HWND hWnd, LPCSTR LanguageName, DWORD LineNumberBackColor, DWORD LineNumberColor)
 
   This function hooks the edit box and tells it to perform highligthing using the language specified
 
@@ -72,7 +76,8 @@ All exported functions are non mangled cdecl convention so you can statically li
   It is not required the edit box still exists for the function to work.
 
 
-+ export CHAR*  TMC_SEB_GetSelectedLanguage()
++ export const CHAR* TMC_SEB_GetSelectedLanguage()
++ export LPCSTR TMC_SEB_GetSelectedLanguageA()
 
   Gets the selected language the user chose when editing. In memeory this is set to the language you last called SetHilite with.
 
@@ -83,7 +88,7 @@ All exported functions are non mangled cdecl convention so you can statically li
   Good practice is to save the setting in an ini file for the next time your program is run
 
 
-+ export void TMC_SEB_CleanUp(HWND hWnd)
++ export void TMC_SEB_CleanUp()
 
   This will free all the memory used by the system. Unhooks all windows, releases every language. Call when your program ends. It's optional, Windows takes care of this really
 
