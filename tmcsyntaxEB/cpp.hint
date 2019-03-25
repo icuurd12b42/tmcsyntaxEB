@@ -1,1 +1,0 @@
-#define repeat(n) for (int __i = n; __i > 0; __i--)
