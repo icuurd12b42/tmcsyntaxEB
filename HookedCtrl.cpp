@@ -1260,7 +1260,7 @@ void HookedCtrl::Paint(HWND hWnd, HDC hDC)
 	SetMapMode(DrawDC, MM_TEXT);
 	//set the mode, this should be opaque on default
 	SetBkMode(DrawDC, OPAQUE);
-	//Esarse the bacground with the text back color
+	//Erase the bacground with the text back color
 	DrawFilledRect(DrawDC, { ClientRect.left,ClientRect.top,ClientRect.right,ClientRect.bottom}, m_ColorSpec->TEXTBACKCOLOR);
 	//Do the margin if there is one, with the line number back color
 	if(MarginWidth !=0) DrawFilledRect(DrawDC, { ClientRect.left,ClientRect.top,MarginWidth, ClientRect.bottom }, m_ColorSpec->LINENOBACKCOLOR);
