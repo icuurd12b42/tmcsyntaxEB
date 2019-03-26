@@ -66,6 +66,7 @@ public:
 	//and if the partial parse started inside a comment, which will allow faster parsing/coloring of the code when editing, especially for megabyte size pieces of code.
 
 public:
+	ColorSpec() { ColorsToArray(); };
 	ColorSpec(const TCHAR* ColorSpecName, const TCHAR* ColorSpecFile);
 	~ColorSpec();
 	void LoadFile(LPCSTR filename);
